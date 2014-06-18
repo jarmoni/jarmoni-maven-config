@@ -39,6 +39,27 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<connection>scm:git@github.com:micha-s/${project.artifactId}.git</connection>
+		<developerConnection>scm:git@github.com:micha-s/${project.artifactId}.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<prerequisites>
+		<maven>3</maven>
+	</prerequisites>
+
 	<properties>
 		<!-- general properties -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,22 +94,6 @@
 		<jarmoni.codestyle.version>1.0.0-SNAPSHOT</jarmoni.codestyle.version>
 	</properties>
 
-	<scm>
-		<connection>scm:git@github.com:micha-s/${project.artifactId}.git</connection>
-		<developerConnection>scm:git@github.com:micha-s/${project.artifactId}.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
 
 	<build>
 		<plugins>
@@ -233,6 +238,22 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+					<artifactId>maven-java-formatter-plugin</artifactId>
+					<version>${maven.java.formatter.version}</version>
+					<configuration>
+						<configFile>${project.build.directory}/codestyle/eclipse/formatter.xml</configFile>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>initialize</phase>
+							<goals>
+								<goal>format</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
 					<version>${maven.checkstyle.plugin.version}</version>
@@ -252,21 +273,6 @@
 								<logViolationsToConsole>true</logViolationsToConsole>
 								<violationSeverity>warning</violationSeverity>
 							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
-					<artifactId>maven-java-formatter-plugin</artifactId>
-					<version>${maven.java.formatter.version}</version>
-					<configuration>
-						<configFile>${project.build.directory}/codestyle/eclipse/formatter.xml</configFile>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>format</goal>
-							</goals>
 						</execution>
 					</executions>
 				</plugin>
@@ -296,15 +302,13 @@
 							<phase>post-integration-test</phase>
 							<configuration>
 								<rules>
-								<!-- implmentation is needed only for Maven 2 -->
-									<rule implementation="org.jacoco.maven.RuleConfiguration">
+									<rule>
 										<element>BUNDLE</element>
 										<limits>
-										<!-- implmentation is needed only for Maven 2 -->
-											<limit implementation="org.jacoco.report.check.Limit">
+											<limit>
 												<counter>COMPLEXITY</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.00</minimum>
+												<minimum>0.70</minimum>
 											</limit>
 										</limits>
 									</rule>
@@ -340,6 +344,19 @@
 										<versionRange>[0.4,)</versionRange>
 										<goals>
 											<goal>format</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jacoco</groupId>
+										<artifactId>jacoco-maven-plugin</artifactId>
+										<versionRange>[0.7.1.201405082137,)</versionRange>
+										<goals>
+											<goal>prepare-agent</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
