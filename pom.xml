@@ -9,7 +9,7 @@
 	<name>maven-config</name>
 	<description>Project which provides basic plugin-configuration for Maven</description>
 
-	<url>http://jarmoni.org</url>
+	<url>https://github.com/jarmoni/${project.artifactId}</url>
 
 <!-- 	<organization> -->
 <!-- 		<name>Jarmoni</name> -->
@@ -40,6 +40,7 @@
 	</licenses>
 
 	<scm>
+		<url>https://github.com/jarmoni/${project.artifactId}.git</url>
 		<connection>scm:git@github.com:micha-s/${project.artifactId}.git</connection>
 		<developerConnection>scm:git@github.com:micha-s/${project.artifactId}.git</developerConnection>
 		<tag>HEAD</tag>
@@ -47,12 +48,12 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>cloudbees</id>
-			<url>https://repository-jarmoni.forge.cloudbees.com/snapshot/</url>
+			<id>sonatype-nexus-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 		<repository>
-			<id>cloudbees</id>
-			<url>https://repository-jarmoni.forge.cloudbees.com/release/</url>
+			<id>sonatype-nexus-staging</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 	</distributionManagement>
 
@@ -91,7 +92,7 @@
 		<lifecycle.mapping.version>1.0.0</lifecycle.mapping.version>
 
 		<!-- codestyle -->
-		<jarmoni.codestyle.version>1.0.0-SNAPSHOT</jarmoni.codestyle.version>
+		<jarmoni.codestyle.version>1.0.0</jarmoni.codestyle.version>
 	</properties>
 
 
@@ -128,12 +129,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${maven.javadoc.plugin.version}</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>${maven.release.plugin.version}</version>
 			</plugin>
 
 			<plugin>
@@ -237,6 +232,16 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${maven.release.plugin.version}</version>
+					<configuration>
+						<mavenExecutorId>forked-path</mavenExecutorId>
+						<useReleaseProfile>false</useReleaseProfile>
+						<arguments>-Prelease-sign-artifacts</arguments>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
 					<artifactId>maven-java-formatter-plugin</artifactId>
@@ -372,17 +377,8 @@
 	</build>
 
 	<profiles>
-		<!-- Because maven-release-plugin will start a new Maven instance, -Dgpg.passphrase=PASSPHRASE 
-			won't work in this case, instead, you should use mvn release:perform -Darguments=-Dgpg.passphrase=PASSPHRASE 
-			(see: https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven) -->
 		<profile>
 			<id>release-sign-artifacts</id>
-			<activation>
-				<property>
-					<name>performRelease</name>
-					<value>true</value>
-				</property>
-			</activation>
 			<build>
 				<plugins>
 					<plugin>
