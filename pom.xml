@@ -41,8 +41,8 @@
 
 	<scm>
 		<url>https://github.com/jarmoni/${project.artifactId}.git</url>
-		<connection>scm:git@github.com:micha-s/${project.artifactId}.git</connection>
-		<developerConnection>scm:git@github.com:micha-s/${project.artifactId}.git</developerConnection>
+		<connection>scm:git:git@github.com:micha-s/${project.artifactId}.git</connection>
+		<developerConnection>scm:git:git@github.com:micha-s/${project.artifactId}.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
