@@ -93,7 +93,7 @@
 		<lifecycle.mapping.version>1.0.0</lifecycle.mapping.version>
 
 		<!-- codestyle -->
-		<jarmoni.codestyle.version>1.0.0</jarmoni.codestyle.version>
+		<jarmoni.codestyle.version>1.0.1-SNAPSHOT</jarmoni.codestyle.version>
 	</properties>
 
 
